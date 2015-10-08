@@ -44,3 +44,40 @@ func TestShouldCellLive(t *testing.T) {
 		}
 	}
 }
+
+func TestCountNeighbours_GivenAnEmptyWorld_ReturnsZero(t *testing.T) {
+	w := world{width: 5, height: 5}
+	want := 0
+
+	c := w.countLiveNeighbours(0)
+
+	if c != want {
+		t.Errorf("countNeighbours() == %d, want %d", c, want)
+	}
+}
+
+func TestCountNeighbours_GivenAFullWorld_ReturnsCorrectIndex(t *testing.T) {
+	w := world{width: 3, height: 3}
+	w.cells = append(w.cells, cell{0, 0, true}, cell{0, 1, true}, cell{0, 2, true}, cell{1, 0, true}, cell{1, 1, true}, cell{1, 2, true}, cell{2, 0, true}, cell{2, 1, true}, cell{2, 2, true})
+	cases := []struct {
+		index, want int
+	}{
+		{0, 3},
+		{1, 5},
+		{2, 3},
+		{3, 5},
+		{4, 8},
+		{5, 5},
+		{6, 3},
+		{7, 5},
+		{8, 3},
+	}
+
+	for _, c := range cases {
+		n := w.countLiveNeighbours(c.index)
+
+		if n != c.want {
+			t.Errorf("countNeighbours(%d) == %d, want %d", c.index, n, c.want)
+		}
+	}
+}
