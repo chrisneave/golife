@@ -1,12 +1,14 @@
 package main
 
+type cellMax int
+
 type world struct {
 	cells         []cell
-	width, height int
+	width, height cellMax
 }
 
 type cell struct {
-	x, y  int
+	x, y  cellMax
 	alive bool
 }
 
@@ -18,7 +20,7 @@ func (c *cell) isDead() (isAlive bool) {
 	return !c.alive
 }
 
-func shouldCellLive(alive bool, neighbours int) (live bool) {
+func shouldCellLive(alive bool, neighbours cellMax) (live bool) {
 	if neighbours == 2 && alive == true {
 		return true
 	}
@@ -28,8 +30,8 @@ func shouldCellLive(alive bool, neighbours int) (live bool) {
 	return false
 }
 
-func (w *world) countLiveNeighbours(cellIndex int) (neighbours int) {
-	if cellIndex >= len(w.cells) {
+func (w *world) countLiveNeighbours(cellIndex cellMax) (neighbours cellMax) {
+	if cellIndex >= cellMax(len(w.cells)) {
 		return
 	}
 
@@ -37,7 +39,7 @@ func (w *world) countLiveNeighbours(cellIndex int) (neighbours int) {
 
 	for i, c := range w.cells {
 		// Don't count the target cell.
-		if cellIndex == i {
+		if cellIndex == cellMax(i) {
 			continue
 		}
 
